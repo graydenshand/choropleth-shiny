@@ -9,7 +9,7 @@ I made this to play around with Shiny and create something with slightly more co
 I compiled the majority of this dataset in 2017 for [this paper](https://link.springer.com/article/10.1007/s11187-017-9984-1). Mostly the data comes from the Census Bureau, the Bureau of Labor Statistics, and the Bureau of Economic Analysis. 
 
 Features
-* Spatial functions to map hover coordinates to states.
+* Spatial functions that map hover coordinates to state names.
   + Allows for the output of any data in the dataset when a state is hovered over. 
 * Slider control changes year and can be "played" for an animated view.
 * Radio buttons to select variable to map in the choropleth. 
