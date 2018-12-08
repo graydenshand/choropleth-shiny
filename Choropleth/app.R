@@ -41,6 +41,21 @@ ui <- fluidPage(
 
 # Define server logic required to draw a chloropleth
 server <- function(input, output) {
+    state.from.hover <- function(point) {
+        i = 1
+        for (p in polygons){
+            if (gContains(p, point)){
+                tmp <- data %>% filter(group==i, Year==input$year_slide) %>% group_by(Area, Year) %>% summarise(Gini=mean(Gini), Top0.1 = mean(Top0.1))
+                #return(paste("State: ", toupper(tmp$Area), "  ", input$inequality_measure, ": ", tmp[[input$inequality_measure]], sep=""))
+                df = data.frame(matrix(c(toupper(tmp$Area), tmp[[input$inequality_measure]]), nrow=1, ncol=2))
+                colnames(df) <- c('State', input$inequality_measure)
+                return(df)
+            }
+            i = i + 1
+        }
+        
+    }
+    
     f = "DATA.Master.csv"
     data = read_csv(f)
     
@@ -49,13 +64,6 @@ server <- function(input, output) {
     data$Area <- sapply(data$Area, tolower)
     
     data <- states %>% inner_join(data) %>% arrange(Area, Year)
-    
-    polygons <- data %>% select(long, lat, Area, group, order) %>%
-        group_by(group) %>%
-        do(poly=select(., long, lat) %>%Polygon()) %>%
-        rowwise() %>%
-        do(polys=Polygons(list(.$poly),.$group)) %>%
-        {SpatialPolygons(.$polys)}
     
     polygons <- list()
     for (i in levels(factor(states$group))) {
@@ -74,20 +82,6 @@ server <- function(input, output) {
          polygons[[i]] <- polygon
     }
    
-    state.from.hover <- function(point) {
-        i = 1
-        for (p in polygons){
-            if (gContains(p, point)){
-                tmp <- data %>% filter(group==i, Year==input$year_slide) %>% group_by(Area, Year) %>% summarise(Gini=mean(Gini), Top0.1 = mean(Top0.1))
-                #return(paste("State: ", toupper(tmp$Area), "  ", input$inequality_measure, ": ", tmp[[input$inequality_measure]], sep=""))
-                df = data.frame(matrix(c(toupper(tmp$Area), tmp[[input$inequality_measure]]), nrow=1, ncol=2))
-                colnames(df) <- c('State', input$inequality_measure)
-                return(df)
-            }
-            i = i + 1
-        }
-            
-    }
     
     
     data %>% filter(Year==2000) %>% ggplot() + 
