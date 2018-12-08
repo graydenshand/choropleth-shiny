@@ -2,7 +2,7 @@
 ### *Choropleth in Shiny with some advanced features*
 
 
-![test](Screen Shot 2018-12-08 at 3.22.52 PM.png)
+![test](https://github.com/graydenshand/choropleth-shiny/blob/master/Screen%20Shot%202018-12-08%20at%203.22.52%20PM.png)
 
 I made this to play around with Shiny shiny and ultimately create something with slightly more complexity than most simple plots.
 
